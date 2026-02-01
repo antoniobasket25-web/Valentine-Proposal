@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mi Valentín 💖</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('https://i.imgur.com/5X6aT9M.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 5px #000;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 50px;
+    position: relative;
+  }
+
+  button {
+    padding: 20px 40px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  #si {
+    background-color: #ff4d4d;
+    color: white;
+  }
+
+  #no {
+    background-color: #555;
+    color: white;
+    position: absolute;
+  }
+
+  .corazon {
+    position: absolute;
+    font-size: 2em;
+    animation: caer 3s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes caer {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<h1>💖 ¿Quieres ser mi Valentín? 💖</h1>
+
+<div class="buttons">
+  <button id="si">SI</button>
+  <button id="no">NO</button>
+</div>
+
+<script>
+  const noBtn = document.getElementById('no');
+  const siBtn = document.getElementById('si');
+
+  // Hacer que NO se escape
+  document.addEventListener('mousemove', (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const rect = noBtn.getBoundingClientRect();
+    const offset = 100;
+    if (
+      x > rect.left - offset &&
+      x < rect.right + offset &&
+      y > rect.top - offset &&
+      y < rect.bottom + offset
+    ) {
+      const newX = Math.random() * (window.innerWidth - rect.width);
+      const newY = Math.random() * (window.innerHeight - rect.height);
+      noBtn.style.left = newX + 'px';
+      noBtn.style.top = newY + 'px';
+    }
+  });
+
+  // Función para crear corazones flotando
+  function crearCorazon() {
+    const corazon = document.createElement('div');
+    corazon.classList.add('corazon');
+    corazon.textContent = '💖';
+    corazon.style.left = Math.random() * window.innerWidth + 'px';
+    corazon.style.fontSize = (20 + Math.random() * 30) + 'px';
+    document.body.appendChild(corazon);
+    setTimeout(() => corazon.remove(), 3000);
+  }
+
+  // Evento al pulsar SI
+  siBtn.addEventListener('click', () => {
+    alert('¡Yupi! 💖 Gracias por decir que sí 😍');
+    // Crear 50 corazones
+    for (let i = 0; i < 50; i++) {
+      setTimeout(crearCorazon, i * 50);
+    }
+  });
+</script>
+</body>
+</html>
