@@ -14,29 +14,39 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at top, #ff9aa2, #ff4d6d);
+
+    /* FONDO GRANDE CENTRADO */
+    background:
+      radial-gradient(circle at center, rgba(255,255,255,0.15), rgba(0,0,0,0.4)),
+      repeating-radial-gradient(circle at center,
+        #ffb6c1 0px,
+        #ffb6c1 60px,
+        #ffc0cb 60px,
+        #ffc0cb 120px);
   }
 
+  /* corazones y flores flotando */
   body::before {
-    content: "💖 💕 💗 💘 💝 💞 💓 💟";
+    content: "💖 🌸 💕 🌹 💗 🌷 💘 🌺 💝 🌼";
     position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 4rem;
-    opacity: 0.15;
-    animation: mover 20s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    opacity: 0.18;
     white-space: nowrap;
+    animation: flotar 25s linear infinite;
   }
 
-  @keyframes mover {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  @keyframes flotar {
+    from { transform: translate(-50%, -50%) translateX(0); }
+    to { transform: translate(-50%, -50%) translateX(-50%); }
   }
 
   h1 {
     color: white;
     font-size: 3em;
-    text-shadow: 2px 2px 5px #000;
+    text-shadow: 2px 2px 6px #000;
     margin-bottom: 20px;
     z-index: 2;
     text-align: center;
@@ -68,7 +78,7 @@
     background-color: #555;
     color: white;
     position: absolute;
-    left: 60%;
+    left: 65%;
     top: 60%;
   }
 
@@ -112,6 +122,27 @@
     color: #333;
     font-size: 1.3em;
   }
+
+  /* FLASH DE CAPTURA */
+  #flash {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 999;
+  }
+
+  #captura {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 20px;
+    font-size: 1.1em;
+    z-index: 1000;
+  }
 </style>
 </head>
 
@@ -134,7 +165,9 @@
   </p>
 </div>
 
-<!-- Música romántica -->
+<div id="flash"></div>
+<div id="captura">📸 Captura guardada · Este momento es eterno 💖</div>
+
 <audio id="musica" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2c2c6b6e0b.mp3" type="audio/mpeg">
 </audio>
@@ -145,9 +178,10 @@
   const contador = document.getElementById("contador");
   const mensajeFinal = document.getElementById("mensajeFinal");
   const musica = document.getElementById("musica");
+  const flash = document.getElementById("flash");
+  const captura = document.getElementById("captura");
 
   let intentos = 0;
-  let musicaIniciada = false;
 
   document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
@@ -168,10 +202,14 @@
   });
 
   siBtn.addEventListener("click", () => {
-    if (!musicaIniciada) {
-      musica.play();
-      musicaIniciada = true;
-    }
+    musica.play();
+
+    // flash captura
+    flash.style.display = "block";
+    setTimeout(() => flash.style.display = "none", 120);
+
+    captura.style.display = "block";
+    setTimeout(() => captura.style.display = "none", 3500);
 
     mensajeFinal.style.display = "block";
     noBtn.style.display = "none";
