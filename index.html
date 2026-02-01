@@ -15,17 +15,28 @@
     justify-content: center;
     align-items: center;
 
-    /* FONDO GRANDE CENTRADO */
-    background:
-      radial-gradient(circle at center, rgba(255,255,255,0.15), rgba(0,0,0,0.4)),
-      repeating-radial-gradient(circle at center,
-        #ffb6c1 0px,
-        #ffb6c1 60px,
-        #ffc0cb 60px,
-        #ffc0cb 120px);
+    /* Fondo gradiente romántico + efecto vela */
+    background: radial-gradient(circle at bottom, #ffb6c1, #ff4d6d);
+    position: relative;
   }
 
-  /* corazones y flores flotando */
+  /* Vela animada */
+  .vela {
+    position: absolute;
+    bottom: 20px;
+    width: 20px;
+    height: 60px;
+    background: linear-gradient(to top, #fffae5, #ffecb3);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255,200,150,0.8);
+    animation: parpadear 1.5s infinite;
+  }
+
+  @keyframes parpadear {
+    0%, 100% { box-shadow: 0 0 15px rgba(255,200,150,0.8); }
+    50% { box-shadow: 0 0 25px rgba(255,200,150,1); }
+  }
+
   body::before {
     content: "💖 🌸 💕 🌹 💗 🌷 💘 🌺 💝 🌼";
     position: absolute;
@@ -45,18 +56,18 @@
 
   h1 {
     color: white;
-    font-size: 3em;
+    font-size: 2.2em;
     text-shadow: 2px 2px 6px #000;
-    margin-bottom: 20px;
+    margin: 0 20px;
     z-index: 2;
     text-align: center;
   }
 
-  p {
-    color: white;
-    font-size: 1.2em;
+  .botones {
+    margin-top: 30px;
+    display: flex;
+    gap: 40px;
     z-index: 2;
-    margin-bottom: 30px;
   }
 
   button {
@@ -71,20 +82,19 @@
   #si {
     background-color: #ff1e56;
     color: white;
-    margin-right: 20px;
   }
 
   #no {
     background-color: #555;
     color: white;
     position: absolute;
-    left: 65%;
+    left: 60%;
     top: 60%;
   }
 
   #contador {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     color: white;
     font-size: 1.1em;
     z-index: 2;
@@ -123,7 +133,6 @@
     font-size: 1.3em;
   }
 
-  /* FLASH DE CAPTURA */
   #flash {
     display: none;
     position: fixed;
@@ -148,13 +157,19 @@
 
 <body>
 
-<h1>💖 ¿Quieres ser mi Valentín? 💖</h1>
-<p>Solo hay una respuesta correcta 😌</p>
+<h1>Pequeña lagartija de cola azul y lazo rojo,<br>¿te gustaría ser mi Valentín?</h1>
 
-<button id="si">SI</button>
-<button id="no">NO</button>
+<div class="botones">
+  <button id="si">SI</button>
+  <button id="no">NO</button>
+</div>
 
 <div id="contador">Intentos de NO: 0 😈</div>
+
+<!-- Velas abajo -->
+<div class="vela" style="left: 20%;"></div>
+<div class="vela" style="left: 40%;"></div>
+<div class="vela" style="left: 70%;"></div>
 
 <div id="mensajeFinal">
   <h2>💘 Sabía que dirías que sí 💘</h2>
@@ -202,6 +217,7 @@
   });
 
   siBtn.addEventListener("click", () => {
+    musica.volume = 0.9; // música más alta
     musica.play();
 
     // flash captura
