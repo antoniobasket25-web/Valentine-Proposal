@@ -14,13 +14,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    /* Fondo gradiente romántico + efecto vela */
     background: radial-gradient(circle at bottom, #ffb6c1, #ff4d6d);
     position: relative;
   }
 
-  /* Vela animada */
+  /* Velas animadas */
   .vela {
     position: absolute;
     bottom: 20px;
@@ -103,13 +101,7 @@
   .corazon {
     position: absolute;
     font-size: 2em;
-    animation: caer 3s linear forwards;
     pointer-events: none;
-  }
-
-  @keyframes caer {
-    from { transform: translateY(-50px); opacity: 1; }
-    to { transform: translateY(100vh); opacity: 0; }
   }
 
   #mensajeFinal {
@@ -176,7 +168,7 @@
   <p>
     Prometo cuidarte, hacerte reír<br>
     y seguir sorprendiéndote cada día.<br><br>
-    ❤️ Feliz San Valentín ❤️
+    ❤️ Seguro que lo pasamos genial amorcito ❤️
   </p>
 </div>
 
@@ -217,7 +209,7 @@
   });
 
   siBtn.addEventListener("click", () => {
-    musica.volume = 0.9; // música más alta
+    musica.volume = 0.9;
     musica.play();
 
     // flash captura
@@ -231,16 +223,27 @@
     noBtn.style.display = "none";
     siBtn.style.display = "none";
 
-    for (let i = 0; i < 80; i++) {
+    // corazones girando alrededor del botón SI
+    const siRect = siBtn.getBoundingClientRect();
+    for (let i = 0; i < 40; i++) {
       setTimeout(() => {
         const corazon = document.createElement("div");
         corazon.className = "corazon";
         corazon.textContent = "💖";
-        corazon.style.left = Math.random() * window.innerWidth + "px";
-        corazon.style.fontSize = (20 + Math.random() * 30) + "px";
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 80 + Math.random() * 40;
+        const centerX = siRect.left + siRect.width / 2;
+        const centerY = siRect.top + siRect.height / 2;
+        corazon.style.left = centerX + radius * Math.cos(angle) + "px";
+        corazon.style.top = centerY + radius * Math.sin(angle) + "px";
         document.body.appendChild(corazon);
+        // animación caer
+        corazon.animate([
+          { transform: `translate(0,0)`, opacity: 1 },
+          { transform: `translate(0,${window.innerHeight}px)`, opacity: 0 }
+        ], { duration: 3000, easing: 'linear' });
         setTimeout(() => corazon.remove(), 3000);
-      }, i * 40);
+      }, i * 50);
     }
   });
 </script>
