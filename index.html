@@ -3,33 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <title>Mi Valentín 💖</title>
+
 <style>
   body {
     margin: 0;
-    padding: 0;
     height: 100vh;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url('https://i.imgur.com/5X6aT9M.png') no-repeat center center fixed;
-    background-size: cover;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: white;
-    text-align: center;
-    overflow: hidden;
+    background: radial-gradient(circle at top, #ff9aa2, #ff4d6d);
+  }
+
+  body::before {
+    content: "💖 💕 💗 💘 💝 💞 💓 💟";
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 4rem;
+    opacity: 0.15;
+    animation: mover 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes mover {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   h1 {
+    color: white;
     font-size: 3em;
-    margin-bottom: 50px;
     text-shadow: 2px 2px 5px #000;
+    margin-bottom: 20px;
+    z-index: 2;
+    text-align: center;
   }
 
-  .buttons {
-    display: flex;
-    gap: 50px;
-    position: relative;
+  p {
+    color: white;
+    font-size: 1.2em;
+    z-index: 2;
+    margin-bottom: 30px;
   }
 
   button {
@@ -38,18 +55,29 @@
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    transition: all 0.2s;
+    z-index: 2;
   }
 
   #si {
-    background-color: #ff4d4d;
+    background-color: #ff1e56;
     color: white;
+    margin-right: 20px;
   }
 
   #no {
     background-color: #555;
     color: white;
     position: absolute;
+    left: 60%;
+    top: 60%;
+  }
+
+  #contador {
+    position: absolute;
+    bottom: 20px;
+    color: white;
+    font-size: 1.1em;
+    z-index: 2;
   }
 
   .corazon {
@@ -60,61 +88,108 @@
   }
 
   @keyframes caer {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+    from { transform: translateY(-50px); opacity: 1; }
+    to { transform: translateY(100vh); opacity: 0; }
+  }
+
+  #mensajeFinal {
+    display: none;
+    position: absolute;
+    background: rgba(255,255,255,0.95);
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    z-index: 10;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+  }
+
+  #mensajeFinal h2 {
+    color: #ff1e56;
+    font-size: 2.5em;
+  }
+
+  #mensajeFinal p {
+    color: #333;
+    font-size: 1.3em;
   }
 </style>
 </head>
-<body>
-<h1>💖 ¿Quieres ser mi Valentín? 💖</h1>
 
-<div class="buttons">
-  <button id="si">SI</button>
-  <button id="no">NO</button>
+<body>
+
+<h1>💖 ¿Quieres ser mi Valentín? 💖</h1>
+<p>Solo hay una respuesta correcta 😌</p>
+
+<button id="si">SI</button>
+<button id="no">NO</button>
+
+<div id="contador">Intentos de NO: 0 😈</div>
+
+<div id="mensajeFinal">
+  <h2>💘 Sabía que dirías que sí 💘</h2>
+  <p>
+    Prometo cuidarte, hacerte reír<br>
+    y seguir sorprendiéndote cada día.<br><br>
+    ❤️ Feliz San Valentín ❤️
+  </p>
 </div>
 
-<script>
-  const noBtn = document.getElementById('no');
-  const siBtn = document.getElementById('si');
+<!-- Música romántica -->
+<audio id="musica" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2c2c6b6e0b.mp3" type="audio/mpeg">
+</audio>
 
-  // Hacer que NO se escape
-  document.addEventListener('mousemove', (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
+<script>
+  const noBtn = document.getElementById("no");
+  const siBtn = document.getElementById("si");
+  const contador = document.getElementById("contador");
+  const mensajeFinal = document.getElementById("mensajeFinal");
+  const musica = document.getElementById("musica");
+
+  let intentos = 0;
+  let musicaIniciada = false;
+
+  document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const offset = 100;
-    if (
-      x > rect.left - offset &&
-      x < rect.right + offset &&
-      y > rect.top - offset &&
-      y < rect.bottom + offset
-    ) {
-      const newX = Math.random() * (window.innerWidth - rect.width);
-      const newY = Math.random() * (window.innerHeight - rect.height);
-      noBtn.style.left = newX + 'px';
-      noBtn.style.top = newY + 'px';
+    const distancia = Math.hypot(
+      e.clientX - (rect.left + rect.width / 2),
+      e.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (distancia < 120) {
+      intentos++;
+      contador.textContent = `Intentos de NO: ${intentos} 😈`;
+
+      const x = Math.random() * (window.innerWidth - rect.width);
+      const y = Math.random() * (window.innerHeight - rect.height);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
     }
   });
 
-  // Función para crear corazones flotando
-  function crearCorazon() {
-    const corazon = document.createElement('div');
-    corazon.classList.add('corazon');
-    corazon.textContent = '💖';
-    corazon.style.left = Math.random() * window.innerWidth + 'px';
-    corazon.style.fontSize = (20 + Math.random() * 30) + 'px';
-    document.body.appendChild(corazon);
-    setTimeout(() => corazon.remove(), 3000);
-  }
+  siBtn.addEventListener("click", () => {
+    if (!musicaIniciada) {
+      musica.play();
+      musicaIniciada = true;
+    }
 
-  // Evento al pulsar SI
-  siBtn.addEventListener('click', () => {
-    alert('¡Yupi! 💖 Gracias por decir que sí 😍');
-    // Crear 50 corazones
-    for (let i = 0; i < 50; i++) {
-      setTimeout(crearCorazon, i * 50);
+    mensajeFinal.style.display = "block";
+    noBtn.style.display = "none";
+    siBtn.style.display = "none";
+
+    for (let i = 0; i < 80; i++) {
+      setTimeout(() => {
+        const corazon = document.createElement("div");
+        corazon.className = "corazon";
+        corazon.textContent = "💖";
+        corazon.style.left = Math.random() * window.innerWidth + "px";
+        corazon.style.fontSize = (20 + Math.random() * 30) + "px";
+        document.body.appendChild(corazon);
+        setTimeout(() => corazon.remove(), 3000);
+      }, i * 40);
     }
   });
 </script>
+
 </body>
 </html>
